@@ -1,5 +1,5 @@
 module io
-
+    
 contains
 
   ! Reads the temperature distribution from an input file
@@ -8,32 +8,27 @@ contains
 
     real, dimension(:,:), allocatable, intent(out) :: field
     character(len=*), intent(in) :: filename
-
-
+    integer   :: nx, ny, i, alloc_stat
+    integer, parameter :: funit=10
+    character(len=1) :: dummy
+    
     ! TODO: implement function that will:
     ! open the file
+    open (funit, file=filename)
     ! read the first header line to get nx and ny
+    read (funit, *) dummy, nx, ny    
     ! allocate matrix called field
+    allocate(field(nx,ny), stat=alloc_stat)
+    if (alloc_stat /= 0) call abort()   
     ! read rest of the file into field
+    do i =1, nx
+       read (funit,*) field(i,:)
+    enddo    
     ! close the file
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    close(funit)
 
   end subroutine read_field
+  
 
   ! Output routine, saves the temperature distribution as a png image
   subroutine write_field(field, iter)

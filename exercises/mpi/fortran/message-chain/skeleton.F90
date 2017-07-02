@@ -13,7 +13,7 @@ program basic
 
   call mpi_init(rc)
   call mpi_comm_rank(MPI_COMM_WORLD, myid, rc)
-  call mpi_comm_sizeMPI_COMM_WORLD, ntasks, rc)
+  call mpi_comm_size(MPI_COMM_WORLD, ntasks, rc)
 
   message = myid
 

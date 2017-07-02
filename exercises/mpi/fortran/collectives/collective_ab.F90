@@ -29,11 +29,11 @@ program coll_exer
   !       some parameters for the call)
 
   !call mpi_bcast(sendbuf,8,mpi_integer,0,mpi_comm_world,ierr)
-  !call mpi_scatter(sendbuf,2,mpi_integer,recvbuf,2,mpi_integer,&
+  call mpi_scatter(sendbuf,2,mpi_integer,recvbuf,2,mpi_integer,&
        &0,mpi_comm_world,ierr)
   ! Print data that was received
   ! TODO: add correct buffer
-  call print_buffers(...)
+  call print_buffers(recvbuf)
 
   call mpi_finalize(ierr)
 

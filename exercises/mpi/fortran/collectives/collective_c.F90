@@ -7,6 +7,7 @@ program coll_exer
   integer :: ntasks, rank, ierr, i, color, sub_comm
   integer, dimension(2*n_mpi_tasks) :: sendbuf, recvbuf
   integer, dimension(2*n_mpi_tasks**2) :: printbuf
+  integer, dimension(n_mpi_tasks) :: recvcnts, displs
 
   call mpi_init(ierr)
   call mpi_comm_size(MPI_COMM_WORLD, ntasks, ierr)
@@ -22,6 +23,9 @@ program coll_exer
   ! Initialize message buffers
   call init_buffers
 
+  recvcnts = (/1,1,2,4/)
+  displs = (/0,1,2,4/)
+  
   ! Print data that will be sent
   call print_buffers(sendbuf)
 
@@ -30,10 +34,13 @@ program coll_exer
 
   !call mpi_bcast(sendbuf,8,mpi_integer,0,mpi_comm_world,ierr)
   !call mpi_scatter(sendbuf,2,mpi_integer,recvbuf,2,mpi_integer,&
-       &0,mpi_comm_world,ierr)
+  !     &0,mpi_comm_world,ierr)
+  call mpi_gatherv(sendbuf,recvcnts(rank+1), mpi_integer,recvbuf,recvcnts, &
+       &displs,mpi_integer,1,mpi_comm_world,ierr)
+  
   ! Print data that was received
   ! TODO: add correct buffer
-  call print_buffers(...)
+  call print_buffers(recvbuf)
 
   call mpi_finalize(ierr)
 
